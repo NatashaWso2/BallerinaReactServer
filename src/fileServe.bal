@@ -13,8 +13,7 @@ service<http> reactServer {
         path:"/static/*"
     }
     resource staticFileServe (http:Connection conn, http:InRequest req) {
-        string srcFilePath = "/home/natasha/Documents/workspace/ballerina-central/build" + req.rawPath;
-        http:OutResponse res = serveThis(srcFilePath);
+        http:OutResponse res = serveDir(req.rawPath);
         _ = conn.respond(res);
     }
 
@@ -55,6 +54,10 @@ function getBytesOfFile (io:ByteChannel src) (blob) {
     return allContents;
 }
 
+function serveDir(string reqPath) (http:OutResponse) {
+    string srcFilePath = "/home/natasha/Documents/workspace/ballerina-central/build" + reqPath;
+    return serveThis(srcFilePath);
+}
 function serveThis (string srcFilePath) (http:OutResponse) {
 
     file:File file = {path:srcFilePath};
